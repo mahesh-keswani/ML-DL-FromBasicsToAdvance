@@ -9,25 +9,12 @@ def sigmoid(z):
 	return 1 / (1 + np.exp(-z))
 
 '''
-	y -> individual probability
-	target -> individual target
-'''
-def cross_entropy(y, target):
-	if target == 1:
-		return -np.log(y)
-	else:
-		return -np.log(1 - y)
-
-'''
 	probs -> vector of probs
 	targets -> vector of targets
 '''
 
 def get_total_error(probs, target):
-	E = 0
-	for i in range(N):
-		E += cross_entropy(probs[i], target[i])
-	return E
+	return -np.mean(target*np.log(probs) + (1 - target)*np.log(1 - probs))
 
 X = np.random.randn(N, D)
 
