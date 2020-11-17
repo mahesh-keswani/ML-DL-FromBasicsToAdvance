@@ -14,7 +14,7 @@ def sigmoid(z):
 '''
 
 def get_total_error(probs, target):
-	return -np.mean(target*np.log(probs) + (1 - target)*np.log(1 - probs))
+	return -np.mean(target*np.log(probs) + (1 - target)*np.log(1 - probs)) + (l2 / 2)*w.T.dot(w)
 
 X = np.random.randn(N, D)
 
@@ -42,11 +42,23 @@ y_line = Xb[:, 1]
 ax.scatter3D(x_line, y_line, z_line, color = "green")
 plt.show()
 
-w = np.random.randn(D) / np.sqrt(D)
+w = np.random.randn(D + 1) / np.sqrt(D + 1)
 costs = []
+learning_rate = 0.001
+l2 = 0.1
 for i in range(100):
 	yhat = sigmoid(Xb.dot(w))
-	diff = y
+	# Note: This has to be yhay - y and not reverse else w will not get 
+	#       optimized 
+	diff = yhat - y
+	error = get_total_error(yhat, y)
+	costs.append(error)
+
+	w = w - learning_rate*(Xb.T.dot(diff) + l2*w)
+
+plt.plot(costs)
+plt.show()
+
 
 
 
