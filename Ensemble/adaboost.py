@@ -56,7 +56,7 @@ class Adaboost:
 		loss = np.exp(-Y * FX).mean()
 		return np.mean(predictions == Y), loss
 
-N_TREES = 100
+N_TREES = 200
 our_model_scores = np.zeros(N_TREES)
 bagging_scores = np.zeros(N_TREES)
 our_model_loss = np.zeros(N_TREES)
