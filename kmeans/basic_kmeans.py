@@ -5,7 +5,7 @@ def d(u, v):
 	diff = u - v
 	return diff.dot(diff)
 
-def plot_kmeans(X, K, max_iters = 200, beta = 1.0):
+def plot_kmeans(X, K, max_iters = 200, beta = 1.0, show_plot = False):
 	N, D = X.shape
 	means = np.zeros((K, D))
 	# responsibilities
@@ -19,7 +19,7 @@ def plot_kmeans(X, K, max_iters = 200, beta = 1.0):
 	for i in range(max_iters):
 		for k in range(K):
 			for n in range(N):
-				R[n, k] = np.exp(-beta * d(means[k], X[n])) / sum( np.exp(-beta * d(means[k], X[n])) for j in range(K) )
+				R[n, k] = np.exp(-beta * d(means[k], X[n])) / sum( np.exp(-beta * d(means[j], X[n])) for j in range(K) )
 		
 		for k in range(K):
 			# taking the weighted average
@@ -30,9 +30,17 @@ def plot_kmeans(X, K, max_iters = 200, beta = 1.0):
 			if np.abs(costs[i] - costs[i - 1]) < 0.1:
 				break
 
-	plt.plot(costs)
-	plt.title("Costs")
-	plt.show()
+	if show_plot:
+		plt.plot(costs)
+		plt.title("Costs")
+		plt.show()
+
+		random_colors = np.random.random((K, 3))
+		colors = R.dot(random_colors)
+		plt.scatter(X[:, 0], X[:, 1], c=colors)
+		plt.show()
+
+	return means, R
 
 def cost(X, R, means):
 	cost = 0
